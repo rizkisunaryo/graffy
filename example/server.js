@@ -10,12 +10,12 @@ import mock from './mockVisitorList';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const g = new Graffy();
-g.use(GraffyFill());
-g.use(mock);
+const store = new Graffy();
+store.use(GraffyFill());
+store.use(mock);
 
 const app = express();
-app.use('/api', GraffyServer(g));
+app.use('/api', GraffyServer(store));
 app.use(express.static(__dirname + '/public'));
 app.listen(8443);
 

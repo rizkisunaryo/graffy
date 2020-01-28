@@ -1,12 +1,5 @@
 import faker from 'faker';
-import {
-  makeGraph,
-  link,
-  page,
-  merge,
-  unwrap,
-  setVersion,
-} from '@graffy/common';
+import { makeGraph, link, page, merge, unwrap } from '@graffy/common';
 
 import makeStream from '@graffy/stream';
 
@@ -22,7 +15,7 @@ export default function(g) {
   g.onRead(() => {
     // console.log('Get: Returning', debug(state));
     ts = Date.now();
-    setVersion(state, ts);
+    makeGraph(state, ts);
     return state;
   });
 

@@ -1,6 +1,6 @@
-import { merge, slice } from '@graffy/common';
+import { merge, slice, finalize } from '@graffy/common';
 
-export default function() {
+export default function({ final } = {}) {
   return store => {
     const cache = [];
 
@@ -9,9 +9,17 @@ export default function() {
       const { known, unknown } = slice(cache, query);
       if (!unknown) return known;
 
+      if (final) return finalize(known, unknown);
+
       const nextValue = await next(unknown);
       merge(cache, nextValue);
       return merge(known || [], nextValue);
+    });
+
+    store.on('write', [], async (change, options, next) => {
+      const appliedChange = final ? change : await next(change);
+      merge(cache, appliedChange);
+      return appliedChange;
     });
   };
 }
